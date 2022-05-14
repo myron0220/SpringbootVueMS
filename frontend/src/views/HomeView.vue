@@ -85,10 +85,11 @@
         </div>
         <div style="padding: 10px 0">
 <!--          <el-input style="width: 350px" placeholder="Use '+' to combine multiple keywords" suffix-icon="el-icon-search"></el-input>-->
-          <el-input style="width: 200px" placeholder="Enter name" suffix-icon="el-icon-user"></el-input>
-          <el-input style="width: 200px" placeholder="Enter e-mail" suffix-icon="el-icon-message" class="ml-5"></el-input>
-          <el-input style="width: 200px" placeholder="Enter address" suffix-icon="el-icon-position" class="ml-5"></el-input>
-          <el-button class="ml-5" type="primary">Search</el-button>
+          <el-input style="width: 200px" placeholder="Enter username" suffix-icon="el-icon-user" v-model="username"></el-input>
+<!--          <el-input style="width: 200px" placeholder="Enter e-mail" suffix-icon="el-icon-message" class="ml-5"></el-input>-->
+<!--          <el-input style="width: 200px" placeholder="Enter address" suffix-icon="el-icon-position" class="ml-5"></el-input>-->
+          <el-button class="ml-5" type="primary" @click="load">Search</el-button>
+          <el-button class="ml-5" type="primary" @click="clear">Show All</el-button>
         </div>
         <div style="margin: 10px 0">
           <el-button type="primary">Add <i class="el-icon-circle-plus-outline"></i></el-button>
@@ -98,11 +99,17 @@
         </div>
 
         <el-table :data="tableData" border stripe :header-cell-class-name="headerClass">
-          <el-table-column prop="date" label="Date" width="140">
+          <el-table-column prop="id" label="ID" width="80">
           </el-table-column>
-          <el-table-column prop="name" label="Name" width="120">
+          <el-table-column prop="username" label="Username" width="140">
           </el-table-column>
-          <el-table-column prop="address" label="Address">
+          <el-table-column prop="nickname" label="Nickname" width="140">
+          </el-table-column>
+          <el-table-column prop="email" label="Email" width="140">
+          </el-table-column>
+          <el-table-column prop="phone" label="Phone" width="140">
+          </el-table-column>
+          <el-table-column prop="address" label="Address" width="140">
           </el-table-column>
           <el-table-column label="Operation">
             <template slot-scope="scope">
@@ -113,10 +120,13 @@
         </el-table>
         <div style="padding: 10px 0">
           <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="pageNum"
               :page-sizes="[5, 10, 15, 20]"
-              :page-size="10"
+              :page-size="5"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="400">
+              :total="total">
           </el-pagination>
         </div>
       </el-main>
@@ -128,20 +138,28 @@
 export default {
   name: 'HomeView',
   data() {
-    const item = {
-      date: '2016-05-02',
-      name: 'Tom',
-      address: 'No. 189, Grove St, Los Angeles'
-    };
+    // default row for showing
+    // const item = {
+    //   date: '2016-05-02',
+    //   name: 'Tom',
+    //   address: 'No. 189, Grove St, Los Angeles'
+    // };
     return {
       msg: "hello Mingzhe!!! : )",
-      tableData: Array(10).fill(item),
+      tableData: [],
+      total: 0,
+      pageNum: 1,
+      pageSize: 5,
+      username: "",
       collapseBtnClass: 'el-icon-s-fold',
       isCollapse: false,
       sideWidth: 200,
       logoShow: true,
       headerClass: 'headerClass'
     }
+  },
+  created() {
+    this.load()
   },
   methods: {
     collapse() {
@@ -155,6 +173,27 @@ export default {
         this.collapseBtnClass = 'el-icon-s-fold'
         this.logoShow = true
       }
+    },
+    load() {
+      // request pagination data
+      fetch("http://localhost:9090/sys-user/page?pageNum="+ this.pageNum+"&pageSize=" + this.pageSize + "&username=" + this.username)
+          .then(res => res.json())
+          .then(res => {
+            this.tableData = res.data
+            this.total = res.total
+          })
+    },
+    clear() {
+      this.username = ""
+      this.load()
+    },
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize
+      this.load()
+    },
+    handleCurrentChange(pageNum) {
+      this.pageNum = pageNum
+      this.load()
     }
   }
 }
