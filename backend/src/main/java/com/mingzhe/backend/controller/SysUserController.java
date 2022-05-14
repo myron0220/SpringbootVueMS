@@ -21,9 +21,9 @@ public class SysUserController {
 
     // add and update
     @PostMapping
-    public Integer save(@RequestBody SysUser sysUser) {
+    public boolean save(@RequestBody SysUser sysUser) {
         // add new or update old
-        return userService.save(sysUser);
+        return userService.saveUser(sysUser);
     }
 
     // query

@@ -1,20 +1,20 @@
 package com.mingzhe.backend.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mingzhe.backend.entity.SysUser;
 import org.apache.ibatis.annotations.*;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 
-@Mapper
-public interface SysUserMapper {
+public interface SysUserMapper extends BaseMapper<SysUser> {
     @Select("SELECT * FROM sys_user")
     List<SysUser> findAll();
 
-    @Insert("INSERT INTO SpringVueMSDB.sys_user " +
-            "(username, password, nickname, email, phone, address) " +
-            "VALUES (#{username}, #{password}, #{nickname}, #{email}, #{phone}, #{address})")
-    Integer insert(SysUser user);
+//    @Insert("INSERT INTO SpringVueMSDB.sys_user " +
+//            "(username, password, nickname, email, phone, address) " +
+//            "VALUES (#{username}, #{password}, #{nickname}, #{email}, #{phone}, #{address})")
+//    Integer insert(SysUser user);
 
     // mapping is defined in src/mapper/SysUser.xml to achieve dynamic update
     Integer update(SysUser sysUser);
