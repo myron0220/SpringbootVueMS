@@ -33,10 +33,16 @@ public class SysUserController {
         return userService.list();
     }
 
-    // D (delete)
+    // D (delete one)
     @DeleteMapping({"/{id}"})
     public boolean delete(@PathVariable Integer id) {
         return userService.removeById(id);
+    }
+
+    // D (delete batch)
+    @PostMapping({"/del/batch"})
+    public boolean deleteBatch(@RequestBody List<Integer> ids) {
+        return userService.removeBatchByIds(ids);
     }
 
     // R (read by condition)
@@ -45,15 +51,16 @@ public class SysUserController {
     public IPage<SysUser> findPage(@RequestParam Integer pageNum,
                                    @RequestParam Integer pageSize,
                                    @RequestParam(defaultValue =  "") String username,
-                                   @RequestParam(defaultValue =  "") String nickname,
+                                   @RequestParam(defaultValue =  "") String email,
                                    @RequestParam(defaultValue =  "") String address) {
         IPage<SysUser> page = new Page<>(pageNum, pageSize);
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(Strings.isNotEmpty(username),"username", username);
         // default add AND by framework
-        queryWrapper.like(Strings.isNotEmpty(nickname),"nickname", nickname);
-        // or test
-        queryWrapper.or().like(Strings.isNotEmpty(address),"address", address);
+        // if OR, add .or() method after queryWrapper
+        queryWrapper.like(Strings.isNotEmpty(email),"email", email);
+        queryWrapper.like(Strings.isNotEmpty(address),"address", address);
+        queryWrapper.orderByDesc("id");
         return userService.page(page, queryWrapper);
     }
 //    @GetMapping("/page")

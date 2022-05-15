@@ -86,19 +86,30 @@
         <div style="padding: 10px 0">
 <!--          <el-input style="width: 350px" placeholder="Use '+' to combine multiple keywords" suffix-icon="el-icon-search"></el-input>-->
           <el-input style="width: 200px" placeholder="Enter username" suffix-icon="el-icon-user" v-model="username"></el-input>
-<!--          <el-input style="width: 200px" placeholder="Enter e-mail" suffix-icon="el-icon-message" class="ml-5"></el-input>-->
-<!--          <el-input style="width: 200px" placeholder="Enter address" suffix-icon="el-icon-position" class="ml-5"></el-input>-->
+          <el-input style="width: 200px" placeholder="Enter e-mail" suffix-icon="el-icon-message" class="ml-5" v-model="email"></el-input>
+          <el-input style="width: 200px" placeholder="Enter address" suffix-icon="el-icon-position" class="ml-5" v-model="address"></el-input>
           <el-button class="ml-5" type="primary" @click="load">Search</el-button>
-          <el-button class="ml-5" type="primary" @click="clear">Show All</el-button>
+          <el-button class="ml-5" type="warning" @click="clear">Show All</el-button>
         </div>
         <div style="margin: 10px 0">
-          <el-button type="primary">Add <i class="el-icon-circle-plus-outline"></i></el-button>
-          <el-button type="danger">Multiple delete <i class="el-icon-remove-outline"></i></el-button>
+          <el-button type="primary" @click="handleAdd">Add <i class="el-icon-circle-plus-outline"></i></el-button>
+          <el-popconfirm
+              class="ml-5"
+              confirm-button-text='Confirm'
+              cancel-button-text='Cancel'
+              icon="el-icon-info"
+              icon-color="red"
+              title="Are you sure?"
+              @confirm="handleDeleteBatch"
+          >
+            <el-button type="danger" slot="reference">Multiple delete <i class="el-icon-remove-outline"></i></el-button>
+          </el-popconfirm>
           <el-button type="primary">Import <i class="el-icon-upload2"></i></el-button>
           <el-button type="primary">Export <i class="el-icon-download"></i></el-button>
         </div>
 
-        <el-table :data="tableData" border stripe :header-cell-class-name="headerClass">
+        <el-table :data="tableData" border stripe :header-cell-class-name="headerClass" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column prop="id" label="ID" width="80">
           </el-table-column>
           <el-table-column prop="username" label="Username" width="140">
@@ -112,9 +123,20 @@
           <el-table-column prop="address" label="Address" width="140">
           </el-table-column>
           <el-table-column label="Operation">
-            <template slot-scope="scope">
-              <el-button type="success">Edit<i class="el-icon-edit-outline" style="margin-left: 5px"></i></el-button>
-              <el-button type="danger">Delete<i class="el-icon-document-delete" style="margin-left: 5px"></i></el-button>
+            <template v-slot="scope">
+              <el-button type="success" @click="handleEdit(scope.row)">Edit<i class="el-icon-edit-outline" style="margin-left: 5px"></i></el-button>
+<!--              confirm-->
+              <el-popconfirm
+                  class="ml-5"
+                  confirm-button-text='Confirm'
+                  cancel-button-text='Cancel'
+                  icon="el-icon-info"
+                  icon-color="red"
+                  title="Are you sure?"
+                  @confirm="handleDelete(scope.row.id)"
+              >
+                <el-button type="danger" slot="reference">Delete<i class="el-icon-document-delete" style="margin-left: 5px"></i></el-button>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -129,12 +151,40 @@
               :total="total">
           </el-pagination>
         </div>
+
+<!--        dialog-->
+        <el-dialog title="Item Information" :visible.sync="dialogFormVisible" width="30%" >
+          <el-form label-width="80px" size="small">
+            <el-form-item label="username">
+              <el-input v-model="form.username" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="nickname">
+              <el-input v-model="form.nickname" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="email">
+              <el-input v-model="form.email" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="phone">
+              <el-input v-model="form.phone" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="address">
+              <el-input v-model="form.address" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">Cancel</el-button>
+            <el-button type="primary" @click="save">Submit</el-button>
+          </div>
+        </el-dialog>
+
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
+import request from "@/utils/request";
+
 export default {
   name: 'HomeView',
   data() {
@@ -147,10 +197,15 @@ export default {
     return {
       msg: "hello Mingzhe!!! : )",
       tableData: [],
+      multipleSelection: [],
       total: 0,
       pageNum: 1,
       pageSize: 5,
       username: "",
+      email: "",
+      address: "",
+      form: {},
+      dialogFormVisible: false,
       collapseBtnClass: 'el-icon-s-fold',
       isCollapse: false,
       sideWidth: 200,
@@ -176,16 +231,70 @@ export default {
     },
     load() {
       // request pagination data
-      fetch("http://localhost:9090/sys-user/page?pageNum="+ this.pageNum+"&pageSize=" + this.pageSize + "&username=" + this.username)
-          .then(res => res.json())
-          .then(res => {
-            this.tableData = res.data
-            this.total = res.total
-          })
+      request.get("sys-user/page", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          username: this.username,
+          email: this.email,
+          address: this.address,
+        }
+      }).then(res =>
+      {
+        this.tableData = res.records
+        this.total = res.total
+      })
     },
     clear() {
       this.username = ""
+      this.email = ""
+      this.address = ""
       this.load()
+    },
+    handleAdd() {
+      this.dialogFormVisible = true;
+      this.form = {}
+    },
+    save() {
+      request.post("sys-user", this.form).then(res => {
+        if (res) {
+          this.$message.success("Save Successfully")
+          this.dialogFormVisible = false
+          this.load()
+        } else {
+          this.$message.error("Save Fails")
+        }
+      })
+    },
+    handleEdit(row) {
+      this.form = row;
+      this.dialogFormVisible = true;
+    },
+    handleDelete(id) {
+      request.delete("sys-user/" + id).then(res => {
+        if (res) {
+          this.$message.success("Delete Successfully")
+          this.load()
+        } else {
+          this.$message.error("Delete Fails")
+        }
+      })
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    handleDeleteBatch() {
+      // flatten:
+      // [{}, {}, {}] => [1,2,3]
+      let ids = this.multipleSelection.map(v => v.id)
+      request.post("sys-user/del/batch", ids).then(res => {
+        if (res) {
+          this.$message.success("Delete Successfully")
+          this.load()
+        } else {
+          this.$message.error("Delete Fails")
+        }
+      })
     },
     handleSizeChange(pageSize) {
       this.pageSize = pageSize
