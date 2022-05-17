@@ -183,8 +183,6 @@
 </template>
 
 <script>
-import request from "@/utils/request";
-
 export default {
   name: 'HomeView',
   data() {
@@ -231,7 +229,7 @@ export default {
     },
     load() {
       // request pagination data
-      request.get("sys-user/page", {
+      this.request.get("sys-user/page", {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
@@ -256,7 +254,7 @@ export default {
       this.form = {}
     },
     save() {
-      request.post("sys-user", this.form).then(res => {
+      this.request.post("sys-user", this.form).then(res => {
         if (res) {
           this.$message.success("Save Successfully")
           this.dialogFormVisible = false
@@ -271,7 +269,7 @@ export default {
       this.dialogFormVisible = true;
     },
     handleDelete(id) {
-      request.delete("sys-user/" + id).then(res => {
+      this.request.delete("sys-user/" + id).then(res => {
         if (res) {
           this.$message.success("Delete Successfully")
           this.load()
@@ -287,7 +285,7 @@ export default {
       // flatten:
       // [{}, {}, {}] => [1,2,3]
       let ids = this.multipleSelection.map(v => v.id)
-      request.post("sys-user/del/batch", ids).then(res => {
+      this.request.post("sys-user/del/batch", ids).then(res => {
         if (res) {
           this.$message.success("Delete Successfully")
           this.load()
