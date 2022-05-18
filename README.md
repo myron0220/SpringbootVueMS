@@ -24,7 +24,7 @@ Use the "Show Deleted" switch to show previously deleted items. Then you can use
 
 ## 3. Appendix
 - The database is run separetely on Google clound, as Replit's terminal seems to response lagly.
-- Important!!! I notice sometime the replit servers are not working correctly. If that cases happends, you can also build this project on your local machine:  
+- Important!!! I notice sometime the replit servers are not working correctly. If this case happends, you may also build this project on your local machine:  
 1. install npm and mvn.
 2. make sure you pwd is `*/SpringbootVueMS`, if not `cd SpringbootVueMS`
 3. `cp -f CORS&request_FOR_LOCAL_SETUP/request.js frontend/src/utils/request.js`
