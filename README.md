@@ -10,7 +10,7 @@ Then click the "Run" button in Replit.
 `https://replit.com/@myron0220/SpringbootVueMS-1#.replit`  
 Then click the "Run" button in Replit.  
 
-- Don't close previous tab, open the following link in a new tab:  
+- Don't close previous tab, waiting for the build finish of previous two tabs, then open the following link in a new tab:  
 `https://springbootvuems.myron0220.repl.co/`  
 This page is the main (ONLY) UI for the website.
 
