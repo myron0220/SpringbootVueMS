@@ -449,7 +449,8 @@ coverage.xml
 docs/_build/
 
 # PyBuilder
-target/
+# upload target for saving time
+# target/
 
 # pyenv
 .python-version
