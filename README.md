@@ -27,9 +27,10 @@ Use the "Show Deleted" switch to show previously deleted items. Then you can use
 - The database is run separetely on Google clound, as Replit's terminal seems to response lagly.
 - Important!!! I notice sometime the replit servers are not working correctly. If this case happends, you may also build this project on your local machine:  
 1. install npm and mvn.
-2. make sure you pwd is `*/SpringbootVueMS`, if not `cd SpringbootVueMS`
-3. `cp -f CORS&request_FOR_LOCAL_SETUP/request.js frontend/src/utils/request.js`
-4. `cp -f CORS&request_FOR_LOCAL_SETUP/CORSConfig.java backend/src/main/java/com/mingzhe/backend/config/CORSConfig.java`
-4. open a new terminal, run `bash frontend/frontend_setup.bash`.
-5. don't close previous terminal, open a new terminal, run `bash backend/backend_setup.bash`.
-6. don't close previous terminal and wait for their setting up finish, then open `http://localhost:8181/` in your browser
+2. `git clone "https://github.com/myron0220/SpringbootVueMS.git"`
+3. make sure you pwd is `*/SpringbootVueMS`, if not `cd SpringbootVueMS`
+4. `cp -f 'CORS&request_FOR_LOCAL_SETUP/request.js' 'frontend/src/utils/request.js'`
+5. `cp -f 'CORS&request_FOR_LOCAL_SETUP/CORSConfig.java' 'backend/src/main/java/com/mingzhe/backend/config/CORSConfig.java'`
+6. open a new terminal, run `bash frontend/frontend_setup.bash`.
+7. don't close previous terminal, open a new terminal, run `bash backend/backend_setup.bash`.
+8. don't close previous terminal and wait for their setting up finish, then open `http://localhost:8181/` in your browser
