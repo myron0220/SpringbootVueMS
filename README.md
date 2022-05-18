@@ -1,2 +1,3 @@
 # SpringbootVueMS
-A management system implemented with Springboot and Vue.
+A inventory management system implemented with Springboot and Vue.
+
