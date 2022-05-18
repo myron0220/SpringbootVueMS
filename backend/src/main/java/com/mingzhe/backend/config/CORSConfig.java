@@ -17,9 +17,9 @@ public class CORSConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         // in local machine, use:
-//        corsConfiguration.addAllowedOrigin("http://localhost:8181");
+        corsConfiguration.addAllowedOrigin("http://localhost:8181");
         // for replit. use:
-        corsConfiguration.addAllowedOrigin("https://springbootvuems.myron0220.repl.co");
+//        corsConfiguration.addAllowedOrigin("https://springbootvuems.myron0220.repl.co");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.setMaxAge(MAX_AGE);

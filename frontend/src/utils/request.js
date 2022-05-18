@@ -2,9 +2,9 @@ import axios from 'axios'
 
 const request = axios.create({
     // in local machine, use:
-    // baseURL: 'http://localhost:9191/',
+    baseURL: 'http://localhost:9191/',
     // in replit, use:
-    baseURL: 'https://springbootvuems-1.myron0220.repl.co',
+    // baseURL: 'https://springbootvuems-1.myron0220.repl.co',
     timeout: 5000
 })
 

@@ -103,8 +103,9 @@
                 <el-button type="danger" slot="reference" v-if="!showDeleted">Delete<i class="el-icon-document-delete" style="margin-left: 5px"></i></el-button>
               </el-popconfirm>
               <el-button type="success" v-if="showDeleted" @click="handleRestore(scope.row)">Restore<i class="el-icon-edit-outline" style="margin-left: 5px"></i></el-button>
-
             </template>
+          </el-table-column>
+          <el-table-column v-if="showDeleted" prop="comment" label="Deletion Comment" width="140">
           </el-table-column>
         </el-table>
         <div style="padding: 10px 0">
@@ -139,10 +140,10 @@
         </el-dialog>
 
         <!--   delete dialog-->
-        <el-dialog title="Deletion Comment" :visible.sync="deleteFormVisible" width="30%" >
+        <el-dialog title="Deletion Comment (Optional)" :visible.sync="deleteFormVisible" width="30%" >
           <el-form label-width="80px" size="small">
-            <el-form-item label="deletionComment">
-              <el-input v-model="form.deletion_comment" autocomplete="off"></el-input>
+            <el-form-item label="Leave your reason for deleting here.">
+              <el-input v-model="form.comment" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -177,7 +178,7 @@ export default {
       product: "",
       sku: "",
       type: "",
-      deletion_comment: "",
+      comment: "",
       form: {},
       editFormVisible: false,
       deleteFormVisible: false,
@@ -246,6 +247,7 @@ export default {
         }
       }).then(res =>
       {
+        console.log(res.records)
         this.tableData = res.records
         this.total = res.total
       })
@@ -295,6 +297,7 @@ export default {
     // use another port mapping to handle deletion comment feature
     saveDeleteComment() {
       // console.log(this.form)
+      console.log(this.form)
       this.request.post("sys-user/deletionComment", this.form).then(res => {
         if (res) {
           this.$message.success("Save Successfully")

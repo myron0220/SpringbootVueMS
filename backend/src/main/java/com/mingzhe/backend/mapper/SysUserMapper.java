@@ -22,7 +22,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
 
     @Select("SELECT * FROM sys_user WHERE deleted = 1 AND product LIKE #{product} AND sku LIKE #{sku} AND type LIKE #{type} ORDER BY id DESC LIMIT #{pageNum}, #{pageSize}")
-    List<SysUser> findDeletedPage(Integer pageNum, Integer pageSize, String product, String sku, String type);
+    List<SysUser> getDelItems(Integer pageNum, Integer pageSize, String product, String sku, String type);
 
     @Select("SELECT COUNT(*) FROM sys_user WHERE deleted = 1 AND product LIKE #{product} AND sku LIKE #{sku} AND type LIKE #{type}")
     Integer findDeletedTotal(String product, String sku, String type);

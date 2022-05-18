@@ -10,6 +10,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +88,8 @@ public class SysUserController {
         product = "%" + product + "%";
         sku = "%" + sku + "%";
         type = "%" + type + "%";
-        List<SysUser> records = userMapper.findDeletedPage(pageNum, pageSize, product, sku, type);
+        List<SysUser> records = userMapper.getDelItems(pageNum, pageSize, product, sku, type);
+        System.out.println(Arrays.toString(records.toArray())+ "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         Integer total = userMapper.findDeletedTotal(product, sku, type);
         Map<String, Object> res = new HashMap<>();
         res.put("records", records);

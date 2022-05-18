@@ -1,7 +1,6 @@
 package com.mingzhe.backend.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
@@ -14,5 +13,6 @@ public class SysUser {
     private String type;
     @TableLogic
     private Integer deleted;
-    private String deletion_comment;
+    private String comment;
+
 }
