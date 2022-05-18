@@ -20,11 +20,20 @@ public class SysUserController {
     @Autowired
     private SysUserService userService;
 
+    @Autowired
+    private SysUserMapper userMapper;
+
     // C U (create or update)
     @PostMapping
     public boolean save(@RequestBody SysUser sysUser) {
         // add new or update old
-        return userService.saveUser(sysUser);
+        return userService.saveOrUpdate(sysUser);
+    }
+
+    // manually ignore global logic deletion setting
+    @PostMapping("/deletionComment")
+    public boolean saveDeletionComment(@RequestBody SysUser sysUser) {
+        return userMapper.update(sysUser);
     }
 
     // R (read all)
@@ -50,30 +59,47 @@ public class SysUserController {
     @GetMapping("/page")
     public IPage<SysUser> findPage(@RequestParam Integer pageNum,
                                    @RequestParam Integer pageSize,
-                                   @RequestParam(defaultValue =  "") String username,
-                                   @RequestParam(defaultValue =  "") String email,
-                                   @RequestParam(defaultValue =  "") String address) {
+                                   @RequestParam(defaultValue =  "") String product,
+                                   @RequestParam(defaultValue =  "") String sku,
+                                   @RequestParam(defaultValue =  "") String type) {
         IPage<SysUser> page = new Page<>(pageNum, pageSize);
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(Strings.isNotEmpty(username),"username", username);
+        queryWrapper.like(Strings.isNotEmpty(product),"product", product);
         // default add AND by framework
         // if OR, add .or() method after queryWrapper
-        queryWrapper.like(Strings.isNotEmpty(email),"email", email);
-        queryWrapper.like(Strings.isNotEmpty(address),"address", address);
+        queryWrapper.like(Strings.isNotEmpty(sku),"sku", sku);
+        queryWrapper.like(Strings.isNotEmpty(type),"type", type);
         queryWrapper.orderByDesc("id");
         return userService.page(page, queryWrapper);
     }
-//    @GetMapping("/page")
-//    public Map<String, Object> findPage(@RequestParam Integer pageNum,
-//                                        @RequestParam Integer pageSize,
-//                                        @RequestParam String username) {
-//        pageNum = (pageNum - 1) * pageSize;
-//        username = "%" + username + "%";
-//        Map<String, Object> res = new HashMap<>();
-//        Integer total = userMapper.selectTotal(username);
-//        List<SysUser> data = userMapper.selectPage(pageNum, pageSize, username);
-//        res.put("total", total);
-//        res.put("data", data);
-//        return res;
-//    }
+
+
+    // Manually written Pagination for showing deleted items
+    // request address：/user/page?pageNum=1&pageSize=10
+    // the first parameter of limit  = (pageNum - 1) * pageSize, because of 0-index in Mysql
+    @GetMapping("/page/deleted")
+    public Map<String, Object> findPageDeleted(@RequestParam Integer pageNum,
+                                               @RequestParam Integer pageSize,
+                                               @RequestParam(defaultValue =  "") String product,
+                                               @RequestParam(defaultValue =  "") String sku,
+                                               @RequestParam(defaultValue =  "") String type) {
+        pageNum = (pageNum - 1) * pageSize;
+        product = "%" + product + "%";
+        sku = "%" + sku + "%";
+        type = "%" + type + "%";
+        List<SysUser> records = userMapper.findDeletedPage(pageNum, pageSize, product, sku, type);
+        Integer total = userMapper.findDeletedTotal(product, sku, type);
+        Map<String, Object> res = new HashMap<>();
+        res.put("records", records);
+        res.put("total", total);
+        return res;
+    }
+
+    // handle restore
+    @GetMapping({"/restore"})
+    public Integer restore(@RequestParam Integer id) {
+        return userMapper.restore(id);
+    }
+
+
 }

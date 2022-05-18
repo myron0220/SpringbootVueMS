@@ -5,23 +5,17 @@
     <update id="update">
         UPDATE SpringVueMSDB.sys_user
         <set>
-            <if test="username != null">
-                username = #{username},
-            </if>
-<!--            <if test="password != null">-->
-<!--                password = #{password}-->
+<!--            <if test="product != null">-->
+<!--                product = #{product},-->
 <!--            </if>-->
-            <if test="nickname != null">
-                nickname = #{nickname},
-            </if>
-            <if test="email != null">
-                email = #{email},
-            </if>
-            <if test="phone != null">
-                phone = #{phone},
-            </if>
-            <if test="address != null">
-                address = #{address}
+<!--            <if test="sku != null">-->
+<!--                sku = #{sku},-->
+<!--            </if>-->
+<!--            <if test="type != null">-->
+<!--                type = #{type}-->
+<!--            </if>-->
+            <if test="deletion_comment != null">
+                deletion_comment = #{deletion_comment}
             </if>
         </set>
         <where>

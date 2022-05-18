@@ -8,7 +8,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
-    public boolean saveUser(SysUser user) {
-        return saveOrUpdate(user);
-    }
+
 }

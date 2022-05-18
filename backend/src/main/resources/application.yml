@@ -12,6 +12,11 @@ spring:
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+#  setting for implementing feature 1
+  global-config:
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 

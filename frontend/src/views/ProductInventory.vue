@@ -48,9 +48,9 @@
       <el-main style="padding-top: 10px">
         <div style="padding: 10px 0">
 <!--          <el-input style="width: 350px" placeholder="Use '+' to combine multiple keywords" suffix-icon="el-icon-search"></el-input>-->
-          <el-input style="width: 200px" placeholder="Enter username" suffix-icon="el-icon-user" v-model="username"></el-input>
-          <el-input style="width: 200px" placeholder="Enter e-mail" suffix-icon="el-icon-message" class="ml-5" v-model="email"></el-input>
-          <el-input style="width: 200px" placeholder="Enter address" suffix-icon="el-icon-position" class="ml-5" v-model="address"></el-input>
+          <el-input style="width: 200px" placeholder="Enter product" suffix-icon="el-icon-user" v-model="product"></el-input>
+          <el-input style="width: 200px" placeholder="Enter SKU" suffix-icon="el-icon-message" class="ml-5" v-model="sku"></el-input>
+          <el-input style="width: 200px" placeholder="Enter type" suffix-icon="el-icon-position" class="ml-5" v-model="type"></el-input>
           <el-button class="ml-5" type="primary" @click="load">Search</el-button>
           <el-button class="ml-5" type="warning" @click="clear">Show All</el-button>
         </div>
@@ -65,29 +65,31 @@
               title="Are you sure?"
               @confirm="handleDeleteBatch"
           >
+            <el-button type="danger" slot="reference" style="margin-right: 10px">Multiple delete <i class="el-icon-remove-outline"></i></el-button>
           </el-popconfirm>
-          <el-button type="danger" slot="reference">Multiple delete <i class="el-icon-remove-outline"></i></el-button>
           <el-button type="primary">Import <i class="el-icon-upload2"></i></el-button>
           <el-button type="primary">Export <i class="el-icon-download"></i></el-button>
+          <el-switch  style="margin-left: 200px"
+              v-model="showDeleted"
+              class="mb-2"
+              size="large"
+              active-text="Show Deleted"
+          />
         </div>
 
         <el-table :data="tableData" border stripe :header-cell-class-name="headerClass" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column prop="id" label="ID" width="80">
           </el-table-column>
-          <el-table-column prop="username" label="Username" width="140">
+          <el-table-column prop="product" label="product" width="140">
           </el-table-column>
-          <el-table-column prop="nickname" label="Nickname" width="140">
+          <el-table-column prop="sku" label="sku" width="140">
           </el-table-column>
-          <el-table-column prop="email" label="Email" width="140">
-          </el-table-column>
-          <el-table-column prop="phone" label="Phone" width="140">
-          </el-table-column>
-          <el-table-column prop="address" label="Address" width="140">
+          <el-table-column prop="type" label="type" width="140">
           </el-table-column>
           <el-table-column label="Operation">
             <template v-slot="scope">
-              <el-button type="success" @click="handleEdit(scope.row)">Edit<i class="el-icon-edit-outline" style="margin-left: 5px"></i></el-button>
+              <el-button type="success" v-if="!showDeleted"  @click="handleEdit(scope.row)">Edit<i class="el-icon-edit-outline" style="margin-left: 5px"></i></el-button>
 <!--              confirm-->
               <el-popconfirm
                   class="ml-5"
@@ -96,10 +98,12 @@
                   icon="el-icon-info"
                   icon-color="red"
                   title="Are you sure?"
-                  @confirm="handleDelete(scope.row.id)"
+                  @confirm="handleDelete(scope.row)"
               >
-                <el-button type="danger" slot="reference">Delete<i class="el-icon-document-delete" style="margin-left: 5px"></i></el-button>
+                <el-button type="danger" slot="reference" v-if="!showDeleted">Delete<i class="el-icon-document-delete" style="margin-left: 5px"></i></el-button>
               </el-popconfirm>
+              <el-button type="success" v-if="showDeleted" @click="handleRestore(scope.row)">Restore<i class="el-icon-edit-outline" style="margin-left: 5px"></i></el-button>
+
             </template>
           </el-table-column>
         </el-table>
@@ -115,28 +119,35 @@
           </el-pagination>
         </div>
 
-<!--        dialog-->
-        <el-dialog title="Item Information" :visible.sync="dialogFormVisible" width="30%" >
+        <!--   edit dialog-->
+        <el-dialog title="Item Information" :visible.sync="editFormVisible" width="30%" >
           <el-form label-width="80px" size="small">
-            <el-form-item label="username">
-              <el-input v-model="form.username" autocomplete="off"></el-input>
+            <el-form-item label="product">
+              <el-input v-model="form.product" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="nickname">
-              <el-input v-model="form.nickname" autocomplete="off"></el-input>
+            <el-form-item label="SKU">
+              <el-input v-model="form.sku" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="email">
-              <el-input v-model="form.email" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="phone">
-              <el-input v-model="form.phone" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="address">
-              <el-input v-model="form.address" autocomplete="off"></el-input>
+            <el-form-item label="type">
+              <el-input v-model="form.type" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">Cancel</el-button>
+            <el-button @click="editFormVisible = false">Cancel</el-button>
             <el-button type="primary" @click="save">Submit</el-button>
+          </div>
+        </el-dialog>
+
+        <!--   delete dialog-->
+        <el-dialog title="Deletion Comment" :visible.sync="deleteFormVisible" width="30%" >
+          <el-form label-width="80px" size="small">
+            <el-form-item label="deletionComment">
+              <el-input v-model="form.deletion_comment" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="deleteFormVisible = false">Cancel</el-button>
+            <el-button type="primary" @click="saveDeleteComment">Submit</el-button>
           </div>
         </el-dialog>
 
@@ -146,6 +157,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'HomeView',
   data() {
@@ -153,7 +165,7 @@ export default {
     // const item = {
     //   date: '2016-05-02',
     //   name: 'Tom',
-    //   address: 'No. 189, Grove St, Los Angeles'
+    //   type: 'No. 189, Grove St, Los Angeles'
     // };
     return {
       msg: "hello Mingzhe!!! : )",
@@ -162,20 +174,36 @@ export default {
       total: 0,
       pageNum: 1,
       pageSize: 5,
-      username: "",
-      email: "",
-      address: "",
+      product: "",
+      sku: "",
+      type: "",
+      deletion_comment: "",
       form: {},
-      dialogFormVisible: false,
+      editFormVisible: false,
+      deleteFormVisible: false,
       collapseBtnClass: 'el-icon-s-fold',
       isCollapse: false,
       sideWidth: 200,
       logoShow: true,
-      headerClass: 'headerClass'
+      headerClass: 'headerClass',
+      showDeleted: false,
     }
   },
   created() {
     this.load()
+  },
+  watch: {
+    showDeleted: function (wantShowDeleted) {
+      if (wantShowDeleted) {
+        // console.log("yes")
+        this.loadDeleted();
+
+      } else {
+        // console.log("no")
+        this.load();
+
+      }
+    }
   },
   methods: {
     collapse() {
@@ -196,9 +224,25 @@ export default {
         params: {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
-          username: this.username,
-          email: this.email,
-          address: this.address,
+          product: this.product,
+          sku: this.sku,
+          type: this.type,
+        }
+      }).then(res =>
+      {
+        this.tableData = res.records
+        this.total = res.total
+      })
+    },
+    loadDeleted() {
+      // request pagination data
+      this.request.get("sys-user/page/deleted", {
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          product: this.product,
+          sku: this.sku,
+          type: this.type,
         }
       }).then(res =>
       {
@@ -207,20 +251,21 @@ export default {
       })
     },
     clear() {
-      this.username = ""
-      this.email = ""
-      this.address = ""
+      this.product = ""
+      this.sku = ""
+      this.type = ""
       this.load()
     },
     handleAdd() {
-      this.dialogFormVisible = true;
+      this.editFormVisible = true;
       this.form = {}
     },
     save() {
+      // console.log(this.form)
       this.request.post("sys-user", this.form).then(res => {
         if (res) {
           this.$message.success("Save Successfully")
-          this.dialogFormVisible = false
+          this.editFormVisible = false
           this.load()
         } else {
           this.$message.error("Save Fails")
@@ -229,10 +274,43 @@ export default {
     },
     handleEdit(row) {
       this.form = row;
-      this.dialogFormVisible = true;
+      this.editFormVisible = true;
     },
-    handleDelete(id) {
-      this.request.delete("sys-user/" + id).then(res => {
+    // restore data
+    handleRestore(row) {
+      this.form = row;
+      this.request.get("sys-user/restore", {
+        params: {
+          id: row.id
+        }
+      }).then(res => {
+        if (res) {
+          this.$message.success("Restore Successfully")
+          this.loadDeleted();
+        } else {
+          this.$message.error("Restore Fails")
+        }
+      })
+    },
+    // use another port mapping to handle deletion comment feature
+    saveDeleteComment() {
+      // console.log(this.form)
+      this.request.post("sys-user/deletionComment", this.form).then(res => {
+        if (res) {
+          this.$message.success("Save Successfully")
+          this.deleteFormVisible = false
+          this.load()
+        } else {
+          this.$message.error("Save Fails")
+        }
+      })
+    },
+    handleDelete(row) {
+      this.form = row;
+      // pop out the deletion comment dialog
+      this.deleteFormVisible = true;
+
+      this.request.delete("sys-user/" + row.id).then(res => {
         if (res) {
           this.$message.success("Delete Successfully")
           this.load()
@@ -250,6 +328,7 @@ export default {
       let ids = this.multipleSelection.map(v => v.id)
       this.request.post("sys-user/del/batch", ids).then(res => {
         if (res) {
+          console.log(ids)
           this.$message.success("Delete Successfully")
           this.load()
         } else {
@@ -259,11 +338,20 @@ export default {
     },
     handleSizeChange(pageSize) {
       this.pageSize = pageSize
-      this.load()
+      if (this.showDeleted) {
+        this.loadDeleted();
+      } else {
+        this.load()
+      }
+
     },
     handleCurrentChange(pageNum) {
       this.pageNum = pageNum
-      this.load()
+      if (this.showDeleted) {
+        this.loadDeleted();
+      } else {
+        this.load()
+      }
     }
   }
 }
