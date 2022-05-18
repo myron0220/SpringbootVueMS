@@ -31,6 +31,7 @@ Use the "Show Deleted" switch to show previously deleted items. Then you can use
 
 ## 3. Appendix
 - The database is run separetely on Google clound, as Replit's terminal seems to response lagly.
+- Normally `node_modules` will not be uploaded, however, I add them because Replit seems too slow some times.
 - Important!!! I notice sometime the replit servers are not working correctly. If this case happends, you may also build this project on your local machine:  
 1. install npm and mvn.
 2. `git clone "https://github.com/myron0220/SpringbootVueMS.git"`
