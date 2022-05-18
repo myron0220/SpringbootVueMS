@@ -31,6 +31,6 @@ Use the "Show Deleted" switch to show previously deleted items. Then you can use
 3. make sure you pwd is `*/SpringbootVueMS`, if not `cd SpringbootVueMS`
 4. `cp -f 'CORS&request_FOR_LOCAL_SETUP/request.js' 'frontend/src/utils/request.js'`
 5. `cp -f 'CORS&request_FOR_LOCAL_SETUP/CORSConfig.java' 'backend/src/main/java/com/mingzhe/backend/config/CORSConfig.java'`
-6. open a new terminal, run `bash frontend/frontend_setup.bash`.
-7. don't close previous terminal, open a new terminal, run `bash backend/backend_setup.bash`.
+6. open a new terminal at `*/SpringbootVueMS`, run `bash frontend/frontend_setup.bash`.
+7. don't close previous terminal, open a new terminal at `*/SpringbootVueMS`, run `bash backend/backend_setup.bash`.
 8. don't close previous terminal and wait for their setting up finish, then open `http://localhost:8181/` in your browser
