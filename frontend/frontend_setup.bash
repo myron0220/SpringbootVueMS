@@ -1,5 +1,5 @@
 #!/bin/bash
 
 cd frontend
-npm install
+# npm install
 npm run serve -- --port 8181
