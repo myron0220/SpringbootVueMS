@@ -20,7 +20,7 @@ This page is the main (ONLY) UI for the website.
 
 - For the additional feature (the "When deleting, allow deletion comments and undeletion" is choosen)  
 When deleting a row, the deletion comment dialog will be automatically popped up. You can choose to leave your comment for that deletion.  
-Use the "Show Deleted" switch to show previously deleted items.
+Use the "Show Deleted" switch to show previously deleted items. Then you can use "restore" to undelete that item.
 
 ## 3. Appendix
 - The database is run separetely on Google clound, as Replit's terminal seems to response lagly.
