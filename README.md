@@ -9,6 +9,7 @@ Then click the "Run" button in Replit.
 - Don't close previous tab, open the following link in a new tab:  
 `https://replit.com/@myron0220/SpringbootVueMS-1#.replit`  
 Then click the "Run" button in Replit.  
+Note: the "Whitelabel Error Page" doesn't matter, as I will not display my website in Replit built-in window.
 
 - Don't close previous tab, waiting for the build finish of previous two tabs, then open the following link in a new tab:  
 `https://springbootvuems.myron0220.repl.co/`  
