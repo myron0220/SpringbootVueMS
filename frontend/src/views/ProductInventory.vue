@@ -55,7 +55,7 @@
           <el-button class="ml-5" type="warning" @click="clear">Show All</el-button>
         </div>
         <div style="margin: 10px 0">
-          <el-button type="primary" @click="handleAdd">Add <i class="el-icon-circle-plus-outline"></i></el-button>
+          <el-button v-if="!showDeleted" type="primary" @click="handleAdd">Add <i class="el-icon-circle-plus-outline"></i></el-button>
           <el-popconfirm
               class="ml-5"
               confirm-button-text='Confirm'
@@ -65,7 +65,7 @@
               title="Are you sure?"
               @confirm="handleDeleteBatch"
           >
-            <el-button type="danger" slot="reference" style="margin-right: 10px">Multiple delete <i class="el-icon-remove-outline"></i></el-button>
+            <el-button v-if="!showDeleted" type="danger" slot="reference" style="margin-right: 10px">Multiple delete <i class="el-icon-remove-outline"></i></el-button>
           </el-popconfirm>
           <el-button type="primary">Import <i class="el-icon-upload2"></i></el-button>
           <el-button type="primary">Export <i class="el-icon-download"></i></el-button>
@@ -86,6 +86,8 @@
           <el-table-column prop="sku" label="sku" width="140">
           </el-table-column>
           <el-table-column prop="type" label="type" width="140">
+          </el-table-column>
+          <el-table-column prop="quality" label="quality" width="140">
           </el-table-column>
           <el-table-column label="Operation">
             <template v-slot="scope">
@@ -131,6 +133,9 @@
             </el-form-item>
             <el-form-item label="type">
               <el-input v-model="form.type" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="quality">
+              <el-input v-model="form.quality" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">

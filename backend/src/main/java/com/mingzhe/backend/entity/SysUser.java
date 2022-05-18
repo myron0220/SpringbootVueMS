@@ -14,5 +14,5 @@ public class SysUser {
     @TableLogic
     private Integer deleted;
     private String comment;
-
+    private Integer quality;
 }
