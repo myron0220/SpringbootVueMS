@@ -29,7 +29,7 @@ Use the "Show Deleted" switch to show previously deleted items. Then you can use
 1. install npm and mvn.
 2. `git clone "https://github.com/myron0220/SpringbootVueMS.git"`
 3. make sure you pwd is `*/SpringbootVueMS`, if not `cd SpringbootVueMS`
-4. `bash CORS&request_FOR_LOCAL_SETUP/local_setup.bash`
+4. `bash 'CORS&request_FOR_LOCAL_SETUP/local_setup.bash'`
 5. open a new terminal at `*/SpringbootVueMS`, run `bash frontend/frontend_setup.bash`.
 6. don't close previous terminal, open a new terminal at `*/SpringbootVueMS`, run `bash backend/backend_setup.bash`.
 7. don't close previous terminal and wait for their setting up finish, then open `http://localhost:8181/` in your browser
