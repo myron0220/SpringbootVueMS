@@ -1,0 +1,8 @@
+/Users/kidsama/Documents/Full_Stack/SpringbootVueMS/backend/src/main/java/com/mingzhe/backend/mapper/SysUserMapper.java
+/Users/kidsama/Documents/Full_Stack/SpringbootVueMS/backend/src/main/java/com/mingzhe/backend/config/MybatisPlusConfig.java
+/Users/kidsama/Documents/Full_Stack/SpringbootVueMS/backend/src/main/java/com/mingzhe/backend/BackendApplication.java
+/Users/kidsama/Documents/Full_Stack/SpringbootVueMS/backend/src/main/java/com/mingzhe/backend/config/SwaggerConfig.java
+/Users/kidsama/Documents/Full_Stack/SpringbootVueMS/backend/src/main/java/com/mingzhe/backend/controller/SysUserController.java
+/Users/kidsama/Documents/Full_Stack/SpringbootVueMS/backend/src/main/java/com/mingzhe/backend/service/SysUserService.java
+/Users/kidsama/Documents/Full_Stack/SpringbootVueMS/backend/src/main/java/com/mingzhe/backend/entity/SysUser.java
+/Users/kidsama/Documents/Full_Stack/SpringbootVueMS/backend/src/main/java/com/mingzhe/backend/config/CORSConfig.java
