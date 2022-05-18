@@ -1,5 +1,8 @@
 # SpringbootVueMS
-![alt text](https://drive.google.com/file/d/1qVz2EXmIZCi697SQFHvcB1XV7TJpnjN_/view?usp=sharing)
+
+<a href="https://drive.google.com/uc?export=view&id=1qVz2EXmIZCi697SQFHvcB1XV7TJpnjN_"><img src="https://drive.google.com/uc?export=view&id=1qVz2EXmIZCi697SQFHvcB1XV7TJpnjN_" style="width: 650px; max-width: 100%; height: auto" title="Click to enlarge picture" />
+
+
 A frontend and backend seperated inventory management system implemented with Springboot and Vue.
 
 ## 1. Deploy on Replit
