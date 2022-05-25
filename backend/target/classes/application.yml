@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://35.184.153.204/SpringVueMSDB?cloudSqlInstance=logistic-inventory:us-central1:inventory-management
+    url: jdbc:mysql://34.69.254.236/SpringVueMSDB?cloudSqlInstance=logistic-inventory-351314:us-central1:myron
     username: root
     password: 123456
   mvc:
